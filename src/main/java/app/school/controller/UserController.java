@@ -2,6 +2,9 @@ package app.school.controller;
 
 import app.school.pagination.FilterStudent;
 import app.school.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -22,12 +25,30 @@ public class UserController {
 
     private final UserService userService;
 
+    @Operation(
+            summary = "Get courses by logged user",
+            description = "Retrieves the list of courses associated with the logged-in user."
+    )
     @GetMapping("/courses")
     public ResponseEntity<List<String>> getCoursesByLoggedUser(Principal principal) {
         List<String> courses = userService.getCoursesByLoggedUser(principal);
         return ResponseEntity.ok(courses);
     }
 
+    @Operation(
+            summary = "Filter students",
+            description = "Filters students based on specified criteria."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Successfully filtered students"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request, invalid filter criteria"
+            )
+    })
     @GetMapping("/filter")
     public ResponseEntity<List<String>> getFilteredStudents(
             @RequestParam(name = "empty", required = false) boolean isEmpty,

@@ -1,6 +1,9 @@
 package app.school.repository;
 
 import app.school.model.Course;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,5 +15,6 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     Optional<List<Course>> findCourseByNameOrCourseCode(String name, Long courseCode);
     Optional<Course> findCourseByCourseCode(Long courseCode);
     Optional<List<Course>> findCoursesByStudentsEmpty();
+    Page<Course> findAll(Pageable pageable);
 
 }

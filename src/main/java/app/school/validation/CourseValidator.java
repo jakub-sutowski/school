@@ -18,7 +18,7 @@ public class CourseValidator {
 
     public void createCourse(CourseRequest request) {
         Optional<List<Course>> courseByNameOrCourseCode = courseRepository.findCourseByNameOrCourseCode(request.getName(), request.getCourseCode());
-        if (courseByNameOrCourseCode.isPresent() && !courseByNameOrCourseCode.get().isEmpty()) {
+        if (courseByNameOrCourseCode.isPresent() && courseByNameOrCourseCode.get().size() > 0) {
             throw new CourseAlreadyExist(request.getName(), request.getCourseCode());
         }
     }

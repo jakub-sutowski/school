@@ -3,6 +3,7 @@ package app.school.controller;
 import app.school.model.request.RegisterRequest;
 import app.school.model.response.AuthenticationResponse;
 import app.school.service.RegisterService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -20,6 +21,10 @@ public class RegisterController {
 
     private final RegisterService registerService;
 
+    @Operation(
+            summary = "User Registration",
+            description = "Registers a new user with the provided details."
+    )
     @PostMapping
     public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(registerService.register(request));

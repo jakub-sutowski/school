@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,13 +90,14 @@ public class CourseService {
         }
     }
 
-    public Map<String, List<String>> getRelations() {
-        HashMap<String, List<String>> map = new HashMap<>();
-        List<Course> coursesList = courseRepository.findAll();
-        for (Course course : coursesList) {
+    public Page<Map<String, List<String>>> getRelations(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Course> coursesPage = courseRepository.findAll(pageRequest);
+        return coursesPage.map(course -> {
+            Map<String, List<String>> map = new HashMap<>();
             map.put(course.getName(), course.getStudents().stream().map(User::getEmail).toList());
-        }
-        return map;
+            return map;
+        });
     }
 
     public CourseDto getCourseByCode(Long courseCode) {

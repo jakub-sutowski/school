@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import static app.school.type.Role.ADMIN;
+import static app.school.type.Role.STUDENT;
 
 @SpringBootApplication
 public class SchoolApplication {
@@ -27,9 +28,18 @@ public class SchoolApplication {
                     .lastName("User")
                     .email("user@mail.com")
                     .password("password")
+                    .role(STUDENT)
+                    .build();
+            System.out.println("Student token: " + authenticationService.register(user).getAccessToken());
+
+            var admin = RegisterRequest.builder()
+                    .firstName("Boss")
+                    .lastName("Admin")
+                    .email("admin@mail.com")
+                    .password("password123")
                     .role(ADMIN)
                     .build();
-            System.out.println("User token: " + authenticationService.register(user).getAccessToken());
+            System.out.println("Admin token: " + authenticationService.register(admin).getAccessToken());
 
         };
     }
