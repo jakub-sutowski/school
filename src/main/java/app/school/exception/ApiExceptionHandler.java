@@ -1,9 +1,6 @@
 package app.school.exception;
 
-import app.school.exception.exceptions.CourseAlreadyExist;
-import app.school.exception.exceptions.CourseNotExist;
-import app.school.exception.exceptions.UserAlreadyExist;
-import app.school.exception.exceptions.UserNotExist;
+import app.school.exception.exceptions.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +58,30 @@ public class ApiExceptionHandler {
                 ZonedDateTime.now()
         );
         log.error("CourseNotExist: {}", exception.getMessage());
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
+    @ExceptionHandler(value = {NoEmptyCourses.class})
+    public ResponseEntity<Object> handlerNoEmptyCourses(NoEmptyCourses exception) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        ApiException apiException = new ApiException(
+                exception.getMessage(),
+                httpStatus,
+                ZonedDateTime.now()
+        );
+        log.error("NoEmptyCourses: {}", exception.getMessage());
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
+    @ExceptionHandler(value = {NoEmptyStudents.class})
+    public ResponseEntity<Object> handlerNoEmptyStudents(NoEmptyStudents exception) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        ApiException apiException = new ApiException(
+                exception.getMessage(),
+                httpStatus,
+                ZonedDateTime.now()
+        );
+        log.error("NoEmptyStudents: {}", exception.getMessage());
         return new ResponseEntity<>(apiException, httpStatus);
     }
 }

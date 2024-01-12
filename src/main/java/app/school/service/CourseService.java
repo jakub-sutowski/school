@@ -3,10 +3,12 @@ package app.school.service;
 import app.school.exception.exceptions.CourseNotExist;
 import app.school.exception.exceptions.NoEmptyStudents;
 import app.school.exception.exceptions.UserNotExist;
-import app.school.model.Course;
-import app.school.model.User;
 import app.school.model.dto.CourseDto;
+import app.school.model.entity.Course;
+import app.school.model.entity.User;
 import app.school.model.request.CourseRequest;
+import app.school.model.request.UpdateCourseRequest;
+import app.school.model.response.CourseResponse;
 import app.school.pagination.FilterCourse;
 import app.school.repository.CourseRepository;
 import app.school.repository.UserRepository;
@@ -18,11 +20,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,10 +58,13 @@ public class CourseService {
     public Status joinUserToCourse(Principal principal, Long courseCode) {
         User loggedUser = userService.getLoggedUser(principal);
         Course course = courseRepository.findCourseByCourseCode(courseCode).orElseThrow(() -> new CourseNotExist(courseCode));
+
         if (!(loggedUser.getCourses().size() < MAX_COURSES_FOR_STUDENT)) {
             return Status.STUDENT_HAS_MAX_COURSES;
         } else if (!(course.getStudents().size() < MAX_STUDENTS_IN_COURSE)) {
             return Status.COURSE_IS_FULL;
+        } else if (course.getStudents().contains(loggedUser)) {
+            return Status.STUDENT_ALREADY_REGISTERED;
         } else {
             course.addUserToCourse(loggedUser);
             courseRepository.save(course);
@@ -93,6 +98,7 @@ public class CourseService {
     public Page<Map<String, List<String>>> getRelations(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Course> coursesPage = courseRepository.findAll(pageRequest);
+
         return coursesPage.map(course -> {
             Map<String, List<String>> map = new HashMap<>();
             map.put(course.getName(), course.getStudents().stream().map(User::getEmail).toList());
@@ -100,8 +106,52 @@ public class CourseService {
         });
     }
 
-    public CourseDto getCourseByCode(Long courseCode) {
+    public CourseResponse getCourseByCode(Long courseCode) {
         Course course = courseRepository.findCourseByCourseCode(courseCode).orElseThrow(() -> new CourseNotExist(courseCode));
+        List<String> students = new ArrayList<>();
+
+        for (User student : course.getStudents()) {
+            students.add(student.getFirstName() + " " + student.getLastName());
+        }
+        return CourseResponse.builder()
+                .name(course.getName())
+                .courseCode(course.getCourseCode())
+                .description(course.getDescription())
+                .students(students)
+                .build();
+    }
+
+    public CourseDto updateCourseDetails(Long courseCode, UpdateCourseRequest request) {
+        Course course = courseRepository.findCourseByCourseCode(courseCode).orElseThrow(() -> new CourseNotExist(courseCode));
+
+        if (request.getName() != null) {
+            course.setName(request.getName());
+        }
+
+        if (request.getDescription() != null) {
+            course.setDescription(request.getDescription());
+        }
+
+        if (request.getCourseCode() != null) {
+            if (!request.getCourseCode().equals(course.getCourseCode())) {
+                if (courseRepository.findCourseByCourseCode(request.getCourseCode()).isPresent()) {
+                    throw new IllegalStateException("Code is already taken");
+                }
+                course.setCourseCode(request.getCourseCode());
+            }
+        }
+        courseRepository.save(course);
         return modelMapper.map(course, CourseDto.class);
+    }
+
+    @Transactional
+    public Status deleteCourseByCode(Long courseCode) {
+        Course course = courseRepository.findCourseByCourseCode(courseCode).orElseThrow(() -> new CourseNotExist(courseCode));
+
+        for (User student : course.getStudents()) {
+            student.getCourses().remove(course);
+        }
+        courseRepository.delete(course);
+        return Status.COURSE_DELETED;
     }
 }

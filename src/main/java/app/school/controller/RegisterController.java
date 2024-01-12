@@ -1,17 +1,14 @@
 package app.school.controller;
 
 import app.school.model.request.RegisterRequest;
-import app.school.model.response.AuthenticationResponse;
 import app.school.service.RegisterService;
+import app.school.type.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +23,17 @@ public class RegisterController {
             description = "Registers a new user with the provided details."
     )
     @PostMapping
-    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<Status> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(registerService.register(request));
+    }
+
+    @Operation(
+            summary = "Assign Admin Role",
+            description = "Assigns admin role to a user by email."
+    )
+    @PatchMapping("/admin")
+    public ResponseEntity<Status> assignAdminRole(@RequestParam("email") String email) {
+        Status status = registerService.assignAdminRole(email);
+        return ResponseEntity.ok(status);
     }
 }

@@ -1,6 +1,5 @@
 package app.school.model.request;
 
-import app.school.type.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -31,6 +30,4 @@ public class RegisterRequest {
     @NotEmpty
     @JsonProperty("password")
     private String password;
-
-    private Role role;
 }

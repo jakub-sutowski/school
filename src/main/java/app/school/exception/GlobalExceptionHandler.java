@@ -51,4 +51,6 @@ public class GlobalExceptionHandler {
         log.error("HttpMessageNotReadableException: {}", errors);
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+
 }

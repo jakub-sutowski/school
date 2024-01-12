@@ -1,7 +1,7 @@
 package app.school.validation;
 
 import app.school.exception.exceptions.CourseAlreadyExist;
-import app.school.model.Course;
+import app.school.model.entity.Course;
 import app.school.model.request.CourseRequest;
 import app.school.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,8 @@ public class CourseValidator {
 
     public void createCourse(CourseRequest request) {
         Optional<List<Course>> courseByNameOrCourseCode = courseRepository.findCourseByNameOrCourseCode(request.getName(), request.getCourseCode());
-        if (courseByNameOrCourseCode.isPresent() && courseByNameOrCourseCode.get().size() > 0) {
+
+        if (courseByNameOrCourseCode.isPresent() && !courseByNameOrCourseCode.get().isEmpty()) {
             throw new CourseAlreadyExist(request.getName(), request.getCourseCode());
         }
     }

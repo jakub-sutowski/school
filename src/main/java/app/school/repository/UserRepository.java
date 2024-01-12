@@ -1,6 +1,6 @@
 package app.school.repository;
 
-import app.school.model.User;
+import app.school.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package app.school.model;
+package app.school.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

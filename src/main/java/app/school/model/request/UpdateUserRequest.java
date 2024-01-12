@@ -1,21 +1,17 @@
-package app.school.model.dto;
+package app.school.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+@NoArgsConstructor
+public class UpdateUserRequest {
 
     private String firstName;
     private String lastName;
     private String email;
-    private List<CourseDto> courses;
-
 }

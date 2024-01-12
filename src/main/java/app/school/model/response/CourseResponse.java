@@ -1,4 +1,4 @@
-package app.school.model.dto;
+package app.school.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +11,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class CourseResponse {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private List<CourseDto> courses;
-
+    private String name;
+    private Long courseCode;
+    private String description;
+    private List<String> students;
 }

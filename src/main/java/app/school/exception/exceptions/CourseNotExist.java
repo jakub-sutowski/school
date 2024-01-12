@@ -4,6 +4,6 @@ public class CourseNotExist extends RuntimeException {
 
     public CourseNotExist(Long courseCode) {
 
-        super("Course with code" + courseCode + " not exist");
+        super("Course with code " + courseCode + " not exist");
     }
 }

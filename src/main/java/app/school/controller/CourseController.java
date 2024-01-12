@@ -2,6 +2,8 @@ package app.school.controller;
 
 import app.school.model.dto.CourseDto;
 import app.school.model.request.CourseRequest;
+import app.school.model.request.UpdateCourseRequest;
+import app.school.model.response.CourseResponse;
 import app.school.pagination.FilterCourse;
 import app.school.service.CourseService;
 import app.school.type.Status;
@@ -12,8 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,8 +66,8 @@ public class CourseController {
             description = "Retrieves details of a specific course by its code."
     )
     @GetMapping("/{courseCode}")
-    public ResponseEntity<CourseDto> getCourseByCode(@PathVariable("courseCode") Long courseCode) {
-        CourseDto course = courseService.getCourseByCode(courseCode);
+    public ResponseEntity<CourseResponse> getCourseByCode(@PathVariable("courseCode") Long courseCode) {
+        CourseResponse course = courseService.getCourseByCode(courseCode);
         return ResponseEntity.ok(course);
     }
 
@@ -110,5 +110,28 @@ public class CourseController {
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Operation(
+            summary = "Update course details",
+            description = "Updates the details of the specific course."
+    )
+    @PatchMapping("{courseCode}/update")
+    public ResponseEntity<CourseDto> updateCourseDetails(
+            @PathVariable("courseCode") Long courseCode,
+            @RequestBody UpdateCourseRequest request
+    ) {
+        CourseDto updatedCourse = courseService.updateCourseDetails(courseCode, request);
+        return ResponseEntity.ok(updatedCourse);
+    }
+
+    @Operation(
+            summary = "Delete course by code",
+            description = "Deletes a specific course by its code."
+    )
+    @DeleteMapping("/{courseCode}")
+    public ResponseEntity<Status> deleteCourseByCode(@PathVariable("courseCode") Long courseCode) {
+        Status status = courseService.deleteCourseByCode(courseCode);
+        return ResponseEntity.ok(status);
     }
 }

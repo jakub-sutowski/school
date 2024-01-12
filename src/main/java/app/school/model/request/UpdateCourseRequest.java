@@ -1,4 +1,4 @@
-package app.school.model.dto;
+package app.school.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class CourseDto {
+@NoArgsConstructor
+public class UpdateCourseRequest {
 
     private String name;
     private Long courseCode;

@@ -1,4 +1,4 @@
-package app.school.model;
+package app.school.model.entity;
 
 import app.school.type.Role;
 import jakarta.persistence.*;
@@ -46,7 +46,8 @@ public class User implements UserDetails {
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Builder.Default
+    private Role role = Role.STUDENT;
 
     @ManyToMany
     private List<Course> courses;
