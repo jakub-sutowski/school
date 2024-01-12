@@ -9,20 +9,23 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - school-network
 
   spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: school-image:latest
     container_name: school-app
     environment:
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/school
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
-      - "8080:8080"
+      - "8090:8080"
     depends_on:
       - postgres
     networks:

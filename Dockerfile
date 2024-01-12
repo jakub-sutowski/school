@@ -7,6 +7,4 @@ COPY mvnw pom.xml ./
 
 COPY src ./src
 
-ENV SPRING_PROFILES_ACTIVE=docker
-
 CMD ["./mvnw", "spring-boot:run"]
