@@ -38,5 +38,4 @@ public class Course {
             user.getCourses().add(this);
         }
     }
-
 }

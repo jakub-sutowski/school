@@ -9,6 +9,7 @@ import app.school.type.Status;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -92,7 +93,7 @@ public class UserController {
     )
     @PatchMapping("/update")
     public ResponseEntity<UserDto> updateUserDetails(
-            @RequestBody UpdateUserRequest request,
+            @Valid @RequestBody UpdateUserRequest request,
             Principal principal) {
         UserDto updatedUser = userService.updateUserDetails(request, principal);
         return ResponseEntity.ok(updatedUser);
@@ -104,7 +105,7 @@ public class UserController {
     )
     @PatchMapping
     public ResponseEntity<?> changePassword(
-            @RequestBody ChangePasswordRequest request,
+            @Valid @RequestBody ChangePasswordRequest request,
             Principal principal
     ) {
         userService.changePassword(request, principal);

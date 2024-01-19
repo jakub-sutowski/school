@@ -83,8 +83,8 @@ public class UserService {
     }
 
     @Transactional
-    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
-        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+    public void changePassword(ChangePasswordRequest request, Principal principal) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new IllegalStateException("Wrong password");

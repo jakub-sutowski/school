@@ -56,7 +56,7 @@ public class CourseController {
     })
     @PostMapping("/join/{courseCode}")
     public ResponseEntity<Status> joinUserToCourse(@PathVariable("courseCode") Long courseCode,
-                                              Principal principal) {
+                                                   Principal principal) {
         Status status = courseService.joinUserToCourse(principal, courseCode);
         return ResponseEntity.ok(status);
     }
@@ -119,7 +119,7 @@ public class CourseController {
     @PatchMapping("{courseCode}/update")
     public ResponseEntity<CourseDto> updateCourseDetails(
             @PathVariable("courseCode") Long courseCode,
-            @RequestBody UpdateCourseRequest request
+            @Valid @RequestBody UpdateCourseRequest request
     ) {
         CourseDto updatedCourse = courseService.updateCourseDetails(courseCode, request);
         return ResponseEntity.ok(updatedCourse);
@@ -135,3 +135,6 @@ public class CourseController {
         return ResponseEntity.ok(status);
     }
 }
+
+
+
