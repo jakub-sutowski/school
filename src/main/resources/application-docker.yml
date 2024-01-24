@@ -1,0 +1,24 @@
+max_courses_for_student: 5
+max_student_in_course: 50
+
+server:
+    port: 8090
+    servlet:
+        contextPath: /api
+
+spring:
+    datasource:
+        password: postgres
+        url: jdbc:postgresql://postgres:5432/school
+        username: postgres
+    jpa:
+        defer-datasource-initialization: true
+        generate-ddl: false
+        hibernate:
+            ddl-auto: create-drop
+        show-sql: false
+    sql:
+        init:
+            mode: always
+springdoc:
+    show-actuator: true

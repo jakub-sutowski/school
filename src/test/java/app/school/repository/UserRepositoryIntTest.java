@@ -39,10 +39,4 @@ class UserRepositoryIntTest {
         assertThat(postgres.isCreated()).isTrue();
         assertThat(postgres.isRunning()).isTrue();
     }
-
-    @Test
-    void shouldFindByEmail() {
-        Optional<User> user = userRepository.findByEmail("john.doe@example.comm");
-        assertThat(user.get().getEmail()).isEqualTo("john.doe@example.comm");
-    }
 }

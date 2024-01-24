@@ -20,14 +20,6 @@ public class SchoolApplication {
 
     ) {
         return args -> {
-            var user = RegisterRequest.builder()
-                    .firstName("Zwyklak")
-                    .lastName("User")
-                    .email("user@mail.com")
-                    .password("password")
-                    .build();
-            System.out.println("Registration status: " + registerService.register(user));
-
             var admin = RegisterRequest.builder()
                     .firstName("Boss")
                     .lastName("Admin")
@@ -35,8 +27,8 @@ public class SchoolApplication {
                     .password("password123")
                     .build();
             System.out.println("Registration status: " + registerService.register(admin));
-
-            registerService.assignAdminRole(admin.getEmail());
+            System.out.printf("Role for %s: %s", admin.getEmail(), registerService.assignAdminRole(admin.getEmail()));
+            System.out.println();
         };
     }
 }
